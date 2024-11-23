@@ -1,0 +1,12 @@
+pre {
+	margin-left: 1in;
+	margin-right: 1in;
+	width: 80em;
+	background-color: #efefef;
+}
+
+@media (prefers-color-scheme: dark) {
+	pre {
+		background-color: #111111;
+	}
+}

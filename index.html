@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<link rel=stylesheet href="../css/new.css">
+<link rel=stylesheet href="css/style.css">
+<title>Magnetic Variation Python Module</title>
+<h1>Magnetic Variation</h1>
+<p>
+A Python3 module to calculate magnetic variation, based on WMM valid until 2025.
+<h2>Download</h2>
+<table>
+ <tr>
+  <td><a href="dist/magvar-0.1.0.tar.gz">magvar-0.1.0.tar.gz</a>
+  <td>0.1.0
+  <td>28.5Kb
+</table>
+<p>
+This module provides the function
+<pre>
+magnetic_variation(date, latitude, longitude, elevation)
+</pre>
+<p>
+<code>date</code> must be a float - the Julian date.
+Example: 2022.1 is in February.
+<p>
+<code>latitude</code> is in radians - positive for north, negative for south.
+<p>
+<code>longitude</code> is in radians - positive for east, negative for west.
+<p>
+<code>elevation</code> is in meters.
+<p>
+This returns what the geo-scientists would call &lsquo;declination&rsquo; but
+what aviators call &lsquo;magnetic variation.&rsquo;
+<p>
+The result is in radians, and is negative for EAST &ldquo;east is least&rdquo;
+and positive for WEST.
+<p>
+For example:
+<pre>
+>>> from geomag import magnetic_variation
+>>> from math import degrees, radians
+
+>>> degrees(magnetic_variation(2022.05,
+                               radians(25.7953611),
+                               radians(-80.2901158),
+                               3)
+6.9474...
+</pre>
+<p>
+This shows the magnetic variation for the Miami International Airport (KMIA)
+as 6.9 degrees WEST, which matches the sectional chart for January 2022.
+<p>
+<h2>Building from COF files</h2>
+<p>
+This distribution includes WMM2010.COF, WMM2015.COF, and WMM2020.COF.
+<p>
+These files were downloaded from the National Centers for Environmental
+Information (NCEI), formerly known as the National Geophysical Data Center
+(NGDC).
+<p>
+<a href="https://www.ngdc.noaa.gov/geomag/WMM/DoDWMM.shtml">https://www.ngdc.noaa.gov/geomag/WMM/DoDWMM.shtml</a>
+<p>
+The file wmm.c contains static data compiled from these .COF files.
+<p>
+To generate the file from scratch, use the &lsquo;compile-cof&rsquo; script:
+<pre>
+$ ./compile-cof WMM2010.COF WMM2015.COF WMM2020.COF >wmm.c
+</pre>
+<p>
+This incorporates all models, so you can get the magnetic variation
+for any latitude and longitude from any date from January 1, 2010.
+<p>
+If you're tight on space, and only need the current magnetic model:
+<pre>
+$ ./compile-cof WMM2020.COF >wmm.c
+</pre>
+<h2>Testing the Software</h2>
+<p>
+The &lsquo;test&rsquo; subdirectory has test values from the NCEI.
+<p>
+Test the Python:
+<pre>
+$ cd test
+$ python3 test_wmm2020_test_values.py
+</pre>
+<p>
+Test the C code:
+<pre>
+$ cd test
+$ make
+$ ./test_geomag
+</pre>
+
+

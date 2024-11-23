@@ -1,0 +1,31 @@
+[project]
+name = "magvar"
+version = "1.0.0"
+authors = [
+	{ name="Terence Way", email="terry@wayforward.net" }
+]
+
+description = "Magnetic variation (aka declination) for aviation navigation"
+
+readme = "README.md"
+
+requires-python=">=3.1"
+
+classifiers = [
+	"License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)",
+	"Topic :: Scientific/Engineering :: GIS",
+	"Intended Audience :: Developers",
+	"Intended Audience :: Science/Research",
+	"Development Status :: 4 - Beta"
+]
+
+[project.urls]
+Homepage = "https://www.wayforward.net/magvar/"
+
+[build-system]
+requires = [
+	"setuptools",
+	"wheel"
+]
+
+build-backend = "setuptools.build_meta"

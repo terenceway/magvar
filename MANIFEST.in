@@ -1,0 +1,5 @@
+include *.COF
+include av_geo.h av_mag.h
+include wmm.mk compile-cof
+include julian.py
+include test/WMM2020_TEST_VALUES.txt test/Makefile test/test_magvar.c
