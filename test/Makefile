@@ -1,4 +1,4 @@
-.PHONY: all clean
+.PHONY: all check clean
 
 INCLUDE=..
 
@@ -19,5 +19,9 @@ av_mag.o : ../av_mag.c ../av_mag.h ../av_geo.h
 
 test_magvar.o : test_magvar.c ../av_mag.h
 
+check : test_magvar
+	./test_magvar WMM2020_TEST_VALUES.txt WMM2025_TestValues.txt
+	python3 test_values.py WMM2020_TEST_VALUES.txt WMM2025_TestValues.txt
+ 
 clean :
 	- rm test_magvar test_magvar.o av_mag.o wmm.o

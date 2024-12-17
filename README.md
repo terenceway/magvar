@@ -38,7 +38,8 @@ as 6.9 degrees WEST, which matches what the sectional chart for January 2022.
 
 ## Building from COF files
 
-This distribution includes WMM2010.COF, WMM2015.COF, and WMM2020.COF.
+This distribution includes WMM2010.COF, WMM2015.COF, WMM2020.COF, and
+WMM2025.COF.
 
 These files were downloaded from the National Centers for Environmental
 Information (NCEI), formerly known as the National Geophysical Data Center
@@ -51,7 +52,7 @@ The file `wmm.c` contains static data compiled from these .COF files.
 To generate the file from scratch, use the `compile-cof' script:
 
 ```
-$ ./compile-cof WMM2010.COF WMM2015.COF WMM2020.COF >wmm.c
+$ ./compile-cof WMM2010.COF WMM2015.COF WMM2020.COF WMM2025.COF >wmm.c
 ```
 
 This incorporates all models, so you can get the magnetic variation
@@ -60,7 +61,7 @@ for any latitude and longitude from any date from January 1, 2010.
 If you're tight on space, and only need the current magnetic model:
 
 ```
-$ ./compile-cof WMM2020.COF >wmm.c
+$ ./compile-cof WMM2025.COF >wmm.c
 ```
 
 
@@ -72,7 +73,7 @@ Test the Python:
 
 ```
 $ cd test
-$ python3 test_wmm2020_test_values.py
+$ python3 test_values.py *.txt
 ```
 
 Test the C code:
@@ -80,6 +81,6 @@ Test the C code:
 ```
 $ cd test
 $ make
-$ ./test_geomag
+$ ./test_magvar *.txt
 $ make clean
 ```

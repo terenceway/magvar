@@ -4,14 +4,30 @@ from math import degrees, radians
 
 from magvar import magnetic_variation
 
-def main():
+files = 0
+
+USAGE = "Usage: python3 test_values.py {TestValues text file}..."
+
+def main(args):
     errors = 0
-    count = 0
+
+    if len(args) == 0:
+        usage()
 
     print('TAP version 13')
-    print('1..1')
+    print('1..%d' % len(args))
 
-    with open('WMM2020_TEST_VALUES.txt') as f:
+    for fn in args:
+        test_file(fn)
+
+def test_file(fn):
+    global files
+
+    errors = count = 0
+
+    files += 1
+
+    with open(fn) as f:
         for line in f:
             a = line.split()
 
@@ -28,17 +44,19 @@ def main():
                 count += 1
 
                 if error > 0.01:
-                    print('not ok - expected', a[4], 'got', -degrees(mv))
+                    print('not ok', files, '- expected', a[4], 'got', -degrees(mv))
                     errors += 1
                     break
 
+    if not errors:
+        print('ok 1 -', files, 'tests passed')
 
+def usage():
+    from sys import stderr, exit
 
-    if errors:
-        from sys import exit
-        exit(1)
-
-    print('ok 1 -', count, 'tests passed')
+    print(USAGE, file=stderr)
+    exit(1)
 
 if __name__ == '__main__':
-    main()
+    from sys import argv
+    main(argv[1:])

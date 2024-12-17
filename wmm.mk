@@ -6,8 +6,8 @@
 
 .PHONY : clean
 
-wmm.c : compile-cof WMM2010.COF WMM2015.COF WMM2020.COF
-	./compile-cof WMM2010.COF WMM2015.COF WMM2020.COF >wmm.c
+wmm.c : compile-cof WMM2010.COF WMM2015.COF WMM2020.COF WMM2025.COF
+	./compile-cof WMM2010.COF WMM2015.COF WMM2020.COF WMM2025.COF >wmm.c
 
 clean :
 	- rm wmm.c

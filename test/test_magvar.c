@@ -11,25 +11,51 @@ const char FILENAME[] = "WMM2020_TEST_VALUES.txt";
 #define radians(x) ((x)*DEG2RAD)
 #define degrees(x) ((x)*RAD2DEG)
 
-int main() {
-	FILE *fp;
-	char buffer[1024];
-	float max_error = 0.01;
-	unsigned errors = 0, tests = 0;
+#define MAX_ERROR (0.01)
+
+static unsigned errors = 0, files = 0;
+static float max_error = 0.00;
+
+static void test_file(const char *filename);
+
+int main(int argc, char **argv) {
+	int i;
+
+	if (argc < 2) {
+		fprintf(stderr, "Usage: test_magvar {TestValues text file}...\n");
+		exit(EXIT_SUCCESS);
+		return 0;
+	}
 
 	printf("TAP version 13\n");
-	printf("1..1\n");
+	printf("1..%d\n", argc - 1);
 
-	fp = fopen(FILENAME, "r");
+	for (i = 1; i < argc; i++)
+		test_file(argv[i]);
+
+	exit(errors > 0 ? EXIT_FAILURE : EXIT_SUCCESS);
+}
+
+static void test_file(const char *filename) {
+	FILE *fp = fopen(filename, "r");
+	char buffer[1024];
+	int result = 0;
+	unsigned tests = 0;
+
+	files ++;
+
 	if (fp == NULL) {
-		perror(FILENAME);
-		exit(EXIT_FAILURE);
+		printf("not ok %u - ", files);
+		perror(filename);
+		return;
 	}
 
 	while (fgets(buffer, sizeof(buffer), fp)) {
 		float	date, height, latitude, longitude,
 			declination, inclination,
 			h, x, y, z, f, dD, dI, dH, dX, dY, dZ, dF;
+
+		float	error;
 
 		if (sscanf(buffer, "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %g",
 				&date, &height, &latitude, &longitude,
@@ -44,26 +70,23 @@ int main() {
 
 			tests++;
 
-			if (fabs(degrees(magvar) + declination) > 0.01) {
-				max_error = fabs(degrees(magvar) + declination);
-				errors ++;
+			error = fabs(degrees(magvar) + declination);
 
-				printf("not ok - expected %g, got %g\n",
-				       declination, -degrees(magvar));
+			if (error > max_error) max_error = error;
+
+			if (error > MAX_ERROR) {
+				errors ++;
+				result ++;
+
+				printf("not ok %u - expected %g, got %g\n",
+				       files, declination, -degrees(magvar));
 				break;				
 			}
 		}
 	}
 
+	if (result == 0)
+		printf("ok %u - %u tests passed\n", files, tests);
+
 	fclose(fp);
-
-	if (errors) {
-		exit(EXIT_FAILURE);
-		return 1;
-	}
-
-	printf("ok 1 - %d tests passed\n", tests);
-
-	exit(EXIT_SUCCESS);
-	return 0;
 }
